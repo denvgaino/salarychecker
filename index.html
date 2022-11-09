@@ -1,0 +1,48 @@
+<html>
+<head>
+	<title>Υπολογισμός Μισθού</title>
+	<script
+	src="https://code.jquery.com/jquery-3.6.1.min.js"
+	integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+	crossorigin="anonymous"></script>
+</head>
+<body>
+	
+
+	<form>
+		<label>Ποιό μισθό τέτοια εποχή το 2021;</label>
+		<input id="salary-old" type="text" name="salary_old">
+		<label>Ποιό μισθό παίρνεται σήμερα;</label>
+		<input id="salary-new" type="text" name="salary_new">
+
+		<button id="cacl">Υπολογισμός</button>
+	</form>
+
+	<div id="result">
+
+		<!-- O πραγματικός σας μισθός είναι <span id="real-salary"></span>. -->Για να μπορείς να αγοράζει με τον μισθός σου ότι αγόραζες το 2021 ο μισθός σου πρέπει να είναι  <span id="new-needed-salary"></span>. Άρα πρέπει να ζητήσεις άμεσα αύξηση τουλάχιστον <span id="salary-dif"></span> ευρώ.
+	</div> 
+	<script>
+		$(document).ready(function(){
+			$("#cacl").click(function(){
+				event.preventDefault();
+				$("#result").hide();
+				var inflation = 112;
+				var old_salary = $('#salary-old').val();
+				console.log(old_salary);
+				var new_salary = $('#salary-new').val();
+				var new_needed_salary = old_salary*(inflation/100);
+				var salary_dif = new_needed_salary - new_salary ;
+				//var real_salary = new_salary - salary_dif;
+
+				//$("#real-salary").text(real_salary);
+				$("#new-needed-salary").text(new_needed_salary);
+				$("#salary-dif").text(salary_dif);
+				$("#result").show();
+			});
+		});
+	</script>
+
+</body>
+
+</html>
