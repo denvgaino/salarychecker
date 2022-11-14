@@ -5,44 +5,137 @@
 	src="https://code.jquery.com/jquery-3.6.1.min.js"
 	integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
 	crossorigin="anonymous"></script>
+	<!-- CSS only -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&display=swap" rel="stylesheet"> 
+
+	<style type="text/css">
+		
+		body{
+			background: #3aab37;
+			font-family: 'Manrope', sans-serif;
+			font-size:19px;
+			color: #fff;
+			text-align: center;
+		}
+		h1{
+			margin-top: 80px;
+			font-size: 50px;
+			margin-bottom: 30px;
+			font-weight:bold;
+		}
+		.question{
+			margin-bottom: 30px;
+		}
+		label{
+			margin-bottom: 8px;
+		}
+		input{
+			background: none;
+			border: 0px;
+			border-bottom: 3px solid #fff;
+			color: #fff;
+			width: 120px;
+			font-size: 30px;
+			text-align: center;
+		}
+		button{
+			margin-top: 20px;
+			background: red;
+			border: 0px;
+			color: #fff;
+			border-radius: 8px;
+			padding: 10px;
+			font-weight: bold;
+		}
+		.results-area{
+			display: none;
+			padding: 50px 100px 50px 100px;
+		}
+		.results-area span{
+			font-weight: bold;
+			font-size: 22px;
+		}
+	}
+</style>
+
 </head>
 <body>
-	
 
-	<form>
-		<label>Ποιό μισθό τέτοια εποχή το 2021;</label>
-		<input id="salary-old" type="text" name="salary_old">
-		<label>Ποιό μισθό παίρνεται σήμερα;</label>
-		<input id="salary-new" type="text" name="salary_new">
+	<div class="container">
 
-		<button id="cacl">Υπολογισμός</button>
-	</form>
+		<div class="row">
+			<div class="offset-md-2 col-md-8">
 
-	<div id="result">
+				<h1>Πόση μείωση έχω φάει;</h1>
 
-		<!-- O πραγματικός σας μισθός είναι <span id="real-salary"></span>. -->Για να μπορείς να αγοράζει με τον μισθός σου ότι αγόραζες το 2021 ο μισθός σου πρέπει να είναι  <span id="new-needed-salary"></span>. Άρα πρέπει να ζητήσεις άμεσα αύξηση τουλάχιστον <span id="salary-dif"></span> ευρώ.
-	</div> 
-	<script>
-		$(document).ready(function(){
-			$("#cacl").click(function(){
-				event.preventDefault();
-				$("#result").hide();
-				var inflation = 112;
-				var old_salary = $('#salary-old').val();
-				console.log(old_salary);
-				var new_salary = $('#salary-new').val();
-				var new_needed_salary = old_salary*(inflation/100);
-				var salary_dif = new_needed_salary - new_salary ;
-				//var real_salary = new_salary - salary_dif;
+				<div class="row question">
+					<div class="col-md-12">
 
-				//$("#real-salary").text(real_salary);
-				$("#new-needed-salary").text(new_needed_salary);
-				$("#salary-dif").text(salary_dif);
-				$("#result").show();
+						<label>Ποιό καθαρό μισθό έπαιρνες τέτοια εποχή το 2020;</label><br>
+						<input id="salary-old" type="text" name="salary_old">
+
+					</div>
+				</div>
+
+				<div class="row question">
+					<div class="col-md-12">
+						<label>Ποιό καθαρό μισθό παίρνεις σήμερα;</label><br>
+						<input id="salary-new" type="text" name="salary_new">
+
+					</div>
+				</div>
+
+				<button id="cacl">Υπολογισμός</button>
+
+				<div class="row">
+					<div class="col-md-12 results-area" id="result-pos">
+						<!-- O πραγματικός σας μισθός είναι <span id="real-salary"></span>. -->Για να μπορείς να αγοράζεις με τον μισθό σου ότι αγόραζες το 2020 <br> ο μισθός σου πρέπει να είναι  <span id="new-needed-salary-pos"></span> ευρώ.<br><br> Έχεις φάει μείωση <span id="salary-dif-pos"></span> ευρώ! <br> Άρα πρέπει να ζητήσεις αντίστοιχη αύξηση μόνο και μόνο για να παίρνεις τα ίδια με τότε.
+					</div> 
+
+					<div class="col-md-12 results-area" id="result-neg">
+						Για να μπορείς να αγοράζει με τον μισθός σου ότι αγόραζες το 2020  <br>ο μισθός σου πρέπει να είναι  <span id="new-needed-salary-neg"></span> ευρώ. <br> <br> Άρα η πραγματική αύξηση που έχεις λάβει είναι <span id="salary-dif-neg"></span> ευρώ και όχι <span id="salary-dif-neg-nom"></span> ευρώ.
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+
+		<script>
+			$(document).ready(function(){
+				$("#cacl").click(function(){
+
+					event.preventDefault();
+					$(".results-area").hide();
+
+					//Set variables
+					var inflation = 113.16;
+					var old_salary = $('#salary-old').val();
+					var new_salary = $('#salary-new').val();
+
+					//Make calc
+					var new_needed_salary = Math.round(old_salary*(inflation/100));
+					var salary_dif = new_needed_salary - new_salary ;
+
+					//Check and show results
+					if(salary_dif>0){
+						$("#new-needed-salary-pos").text(new_needed_salary);
+						$("#salary-dif-pos").text(salary_dif);
+						$("#result-pos").show();
+					}else{
+						var salary_dif_nominal = new_salary - old_salary ;
+						$("#new-needed-salary-neg").text(new_needed_salary);
+						$("#salary-dif-neg-nom").text(salary_dif_nominal);
+						$("#salary-dif-neg").text(salary_dif*-1);
+						$("#result-neg").show();
+					}
+					
+				});
 			});
-		});
-	</script>
+		</script>
+	</body>
 
-</body>
-
-</html>
+	</html>
